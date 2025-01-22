@@ -19,7 +19,7 @@ public class PursePanel extends JPanel{
         super.paintComponent(g);
         if(purse != null){
             int y = 10;
-            for (Map.Entry<Denomination, Integer> entry : purse.cash.entrySet()){
+            for (Map.Entry<Denomination, Integer> entry :  purse.cash.entrySet()){
                 String text = entry.getKey().name() + ": " + entry.getValue();
                 g.drawString(text, 10, y);
                 y += 20;
