@@ -1,3 +1,5 @@
+package Core;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -10,11 +12,23 @@ public class Purse {
     }
 
     public double remove (Denomination type , int num){
-        if (!cash.containsKey(type)) return 0;
-        int current = cash.get(type);
-        int toRemove = Math.min(num, current);
-        cash.put(type, current-toRemove);
-        return toRemove * type.amt();
+        if (cash.containsKey(type)) {
+            int current = cash.get(type);
+            if (current >= num) {
+                cash.put(type, current - num);
+                return num * type.amt();
+            }
+        }
+        return 0.0;
+    }
+
+    public double getValue(){
+        return cash.entrySet().stream().mapToDouble(entry -> entry.getKey().amt()
+        * entry.getValue()).sum();
+    }
+
+    public Map<Denomination, Integer> getCash(){
+        return cash;
     }
 
     public String toString(){
