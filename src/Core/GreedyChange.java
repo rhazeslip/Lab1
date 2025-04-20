@@ -6,17 +6,18 @@ public class GreedyChange implements ChangeCalculation {
     @Override
     public Purse makeChange(double amt, List<Denomination> denominations) {
         Purse purse = new Purse();
-        double remaining = amt;
+        int remaining = (int) Math.round(amt * 100);
 
         for (Denomination denomination : denominations) {
-            if (remaining <= 0) break;
-
-            int count = (int) (remaining / denomination.amt());
-            if (count > 0) {
+            int valueInPennies = (int) Math.round(denomination.amt() * 100);
+            if (remaining >= valueInPennies) {
+                int count = remaining / valueInPennies;
                 purse.add(denomination, count);
-                remaining -= count + denomination.amt();
-                remaining = Math.round(remaining * 100) / 100.0;
+                remaining -= count * valueInPennies;
             }
+        }
+        if (remaining > 0) {
+            purse.add(denominations.get(denominations.size()-1), 1);
         }
         return purse;
     }
