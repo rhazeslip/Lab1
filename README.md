@@ -4,6 +4,7 @@ For the Strategy pattern I had to create an additional interface named ChangeCal
 For the observer pattern I had to create an additional interface named RegisterObserver and
   some changes to the register class and RegisterPanel class files to implement the RegisterObserver
   file.
+Implementing both of these patterns allows for Decoupled UI updates, Multiple view Supports, Future-proof Notifications, Swappable algorithms, isolated Complexity, and Runtime Flexibility.
 Advantages:
   Strategy Pattern:
   - Can now easily add alternative calculations for the change.
@@ -14,5 +15,8 @@ Advantages:
   - The Register no longer need to Control the UI components
   - Has multiple views to observe the same register
   - Reduced coupling between components
+
+
+
 
 
