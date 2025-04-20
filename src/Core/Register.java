@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Register {
-    private List<Denomination> denominations = Arrays.asList(
+    private final List<Denomination> denominations = Arrays.asList(
             //Import file names at the end of each denomination
             new Denomination ("Hundred Dollar Bill", 100.00, "bill", "images/100dollar.png"),
             new Denomination ("Fifty Dollar Bill", 50.00, "bill", "images/50dollar.png"),
@@ -19,16 +19,22 @@ public class Register {
             new Denomination("Penny",0.01, "coin", "images/penny.png")
     );
 
-    public Purse makeChange(double amt){
-        Purse purse = new Purse ();
-        for (Denomination denomination : denominations) {
-            int count = (int) (amt / denomination.amt());
-            if (count > 0) {
-                purse.add(denomination, count);
-                amt -= count * denomination.amt();
-            }
-        }
-        return purse;
+    private ChangeCalculation strategy;
+
+    public Register() {
+        this.strategy = new GreedyChange();
+    }
+
+    public Register(ChangeCalculation strategy) {
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(ChangeCalculation strategy) {
+        this.strategy = strategy;
+    }
+
+    public Purse makeChange(double amt) {
+        return strategy.makeChange(amt, denominations);
     }
     public static void main(String[] args) {
         Register register = new Register();
