@@ -6,12 +6,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class RegisterPanel extends JPanel {
-    private Register register = new Register();
-    private JTextField input;
-    private PursePanel changePanel;
+public class RegisterPanel extends JPanel implements RegisterObserver {
+    private final Register register;
+    private final JTextField input;
+    private final PursePanel changePanel;
 
     public RegisterPanel() {
+        register = new Register();
+        register.addObserver(this);
+
         setLayout(new BorderLayout());
 
         //Input Panel
@@ -21,6 +24,7 @@ public class RegisterPanel extends JPanel {
         //Change Panel
         changePanel = new PursePanel();
 
+        calculateButton.addActionListener(new InputListener());
         input.addActionListener(new InputListener());
 
         JPanel inputPanel = new JPanel();
@@ -33,16 +37,20 @@ public class RegisterPanel extends JPanel {
 
     }
 
+    @Override
+    public void update(Purse purse){
+        changePanel.setPurse(purse);
+        changePanel.repaint();
+    }
+
     private class InputListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try{
                 double amt = Double.parseDouble(input.getText());
-                Purse purse = register.makeChange(amt);
-                changePanel.setPurse(purse);
-                changePanel.repaint();
+                register.makeChange(amt);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(RegisterPanel.this,
-                        "Invalid Amount");
+                        "Invalid Amount", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

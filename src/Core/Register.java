@@ -3,6 +3,7 @@ package Core;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Register {
     private final List<Denomination> denominations = Arrays.asList(
@@ -20,6 +21,7 @@ public class Register {
     );
 
     private ChangeCalculation strategy;
+    private final List<RegisterObserver> observers = new ArrayList<>();
 
     public Register() {
         this.strategy = new GreedyChange();
@@ -33,16 +35,23 @@ public class Register {
         this.strategy = strategy;
     }
 
-    public Purse makeChange(double amt) {
-        return strategy.makeChange(amt, denominations);
+    public void addObserver(RegisterObserver observer) {
+        observers.add(observer);
     }
-    public static void main(String[] args) {
-        Register register = new Register();
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the amount: ");
-        String amount = scanner.nextLine();
-        double amt = Double.parseDouble(amount);
-        Purse purse = register.makeChange(amt);
-        System.out.println("Change for $" + amt + ":\n" + purse);
+
+    public void removeObserver(RegisterObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers(Purse purse) {
+        for (RegisterObserver observer : observers) {
+            observer.update(purse);
+        }
+    }
+
+    public Purse makeChange(double amt) {
+        Purse purse = strategy.makeChange(amt, denominations);
+        notifyObservers(purse);
+        return purse;
     }
 }
