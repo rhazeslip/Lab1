@@ -8,7 +8,7 @@ For the observer pattern I had to create an additional interface named RegisterO
   some changes to the register class and RegisterPanel class files to implement the RegisterObserver
   file. The purpose of the new interface is to standardize how components get change notifications
   The code changes makes it to where the register no longer knows about the UI and the notifications
-  can be pre/post notifications now.
+  can be pre/post notifications now. 
 Advantages:
   Strategy Pattern:
   - Can now easily add alternative calculations for the change.
